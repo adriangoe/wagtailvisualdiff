@@ -1,0 +1,125 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="{% static "wagtailvisualdiff/main.js"  %}"></script>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Visual Comparison for MKE</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	</head>
+	<body>
+		<div>
+			<section role="main">
+				<div id="image-diff" class="col-sm-7" style="position:relative; overflow:hidden;">
+					<h1 id="loading">LOADING. Refresh if nothing happens after 10 seconds</h1>
+					<img id="diff1" class="diffimg" style="position:absolute;">
+					<h2 id="identical" style="display:none;">No visible changes</h2>
+				</div>
+				<div id="image-diff2" class="col-sm-3" style="position:relative; overflow:hidden;">
+					<img id="diff2" class="diffimg" style="position:absolute;">
+					<h2 id="identical2" style="display:none;">No visible changes</h2>
+				</div>
+
+				<div class="col-sm-2">
+					<div class="btn-group btn-group-xs buttons" style="display:none; margin-top:1em;">
+						<button class="btn btn-primary active" id="raw">Ignore nothing</button>
+						<button class="btn btn-default" id="colors">Ignore colors</button>
+						<button class="btn btn-info" id="antialising">Ignore antialiasing</button>
+					</div>
+
+					<div class="btn-group btn-group-xs buttons" style="display:none; margin-top:1em;">
+						<button class="btn btn-primary active" id="original-size">Use original size</button>
+						<button class="btn btn-primary" id="same-size">Scale to same size</button>
+					</div>
+
+
+					<div class="btn-group btn-group-xs buttons" style="display:none; margin-top:1em;">
+						<button class="btn btn-danger active" id="pink">Pink</button>
+						<button class="btn btn-warning" id="yellow">Yellow</button>
+					</div>
+
+					<div class="btn-group btn-group-xs buttons" style="display:none; margin-top:1em;">
+						<button class="btn btn-primary" id="flat">Flat</button>
+						<button class="btn btn-primary" id="movement">Movement</button>
+						<button class="btn btn-primary" id="flatDifferenceIntensity">Flat with diff intensity</button>
+						<button class="btn btn-primary active" id="movementDifferenceIntensity">Movement with diff intensity</button>
+					</div>
+
+					<div class="btn-group btn-group-xs buttons" style="display:none; margin-top:1em;">
+						<button class="btn btn-info" id="opaque">Opaque</button>
+						<button class="btn btn-default active" id="transparent">Transparent</button>
+					</div>
+
+					<div id="diff-results" style="display:none; margin-top:1em;">
+						<p>
+							<strong>Desktop: The second image is <span id="mismatch"></span>% different compared to the first.
+							<span id="differentdimensions" style="display:none;">And they have different dimensions.</span></strong>
+						</p>
+					</div>
+					<div id="diff-results2" style="display:none;">
+						<p>
+							<strong>Mobile: The second image is <span id="mismatch2"></span>% different compared to the first.
+							<span id="differentdimensions2" style="display:none;">And they have different dimensions.</span></strong>
+						</p>
+					</div>
+
+					<p id="thesame" style="display:none;">
+						<strong>These images are the same!</strong>
+					</p>
+					<p id="thesame2" style="display:none;">
+						<strong>These images are the same!</strong>
+					</p>
+					{% if show_all %}
+						<a href="#img_frame" id="down" style="display:none;">
+							<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+							<span>Scroll to Screenshots</span>
+						</a>
+					{% else %}
+						<a id="down" style="display:none;"></a>
+					{% endif %}
+				</div>
+
+			{% if show_all %}
+				<div class="col-sm-12"><h1>{{ revision1.page_revision.page }}</h1></div>
+				<div class="col-sm-6" id="img_frame">
+					<p id="title1">Revision {{ revision1.page_revision.id }} published by {{revision1.page_revision.user.get_full_name}}
+						<a href='{% url 'wagtailrollbacks:confirm_page_reversion' revision_id=revision1.page_revision.id %}' target='blank'>Revert</a> or
+						<a href='{% url 'wagtailrollbacks:preview_page_version' revision_id=revision1.page_revision.id %}' target='blank'>Preview</a>
+					</p>
+					<img id="image1" style="vertical-align:top;" src="{{ revision1.screenshot.url }}">
+					<img id="image1_mobile" style="vertical-align:top;" src="{{ revision1.mobile_screenshot.url }}">
+				</div>
+				<div class="col-sm-6" id="img_frame2">
+					<p id="title2">Revision {{ revision2.page_revision.id }} published by {{revision2.page_revision.user.get_full_name}}
+						<a href='{% url 'wagtailrollbacks:confirm_page_reversion' revision_id=revision2.page_revision.id %}' target='blank'>Revert</a> or
+						<a href='{% url 'wagtailrollbacks:preview_page_version' revision_id=revision2.page_revision.id %}' target='blank'>Preview</a>
+					</p>
+					<img id="image2" style="vertical-align:top;" src="{{ revision2.screenshot.url }}">
+					<img id="image2_mobile" style="vertical-align:top;" src="{{ revision2.mobile_screenshot.url }}">
+				</div>
+			{% else %}
+				<div class="col-sm-6" id="img_frame" hidden>
+					<img id="image1" style="vertical-align:top;" src="{{ revision1.screenshot.url }}">
+					<img id="image1_mobile" style="vertical-align:top;" src="{{ revision1.mobile_screenshot.url }}">
+				</div>
+				<div class="col-sm-6" id="img_frame2" hidden>
+					<img id="image2" style="vertical-align:top;" src="{{ revision2.screenshot.url }}">
+					<img id="image2_mobile" style="vertical-align:top;" src="{{ revision2.mobile_screenshot.url }}">
+				</div>
+			{% endif %}
+			</section>
+
+			<footer class="footer col-xs-12">
+				<p>
+					Based on resemble.js by <a href="https://github.com/jamescryer" target="_blank">James Cryer</a> and the Huddle development team.
+				</p>
+			</footer>
+		</div>
+		<script src="{% static "wagtailvisualdiff/resemble.js" %}"></script>
+	</body>
+</html>

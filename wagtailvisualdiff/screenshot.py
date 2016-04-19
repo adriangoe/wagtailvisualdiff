@@ -30,7 +30,7 @@ def process_page_published(instance_id, revision_id):
 	}
 
 	retrynum = 0
-	while retrynum < 10:
+	while True:
 		fp = urllib.urlopen(screenshotlayer(page_url, params))
 		retrynum += 1
 		if fp.getcode() == 200:
@@ -52,7 +52,7 @@ def process_page_published(instance_id, revision_id):
 		'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12A366 Safari/600.1.4'
 	}
 	retrynum = 0
-	while retrynum < 10:
+	while True:
 		fp2 = urllib.urlopen(screenshotlayer(page_url, params))
 		retrynum += 1
 		if fp2.getcode() == 200:
@@ -96,10 +96,10 @@ def get_diff(prs):
 	}
 	url = screenshotlayer(diff_url, params)
 	retrynum = 0
-	while retrynum < 10:
+	while True:
 		response = requests.get(url, stream=True)
 		retrynum += 1
-		if fresponse.status_code == 200:
+		if response.status_code == 200:
 			img = Image.open(StringIO(response.content))
 			break
 		else:

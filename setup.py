@@ -30,5 +30,6 @@ setup(
     ],
     install_requires=[
         "wagtail>=0.8.7",
+        "wagtailplus",
     ],
 )

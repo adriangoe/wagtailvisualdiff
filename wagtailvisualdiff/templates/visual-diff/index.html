@@ -91,25 +91,25 @@
 						<a href='{% url 'wagtailrollbacks:confirm_page_reversion' revision_id=revision1.page_revision.id %}' target='blank'>Revert</a> or
 						<a href='{% url 'wagtailrollbacks:preview_page_version' revision_id=revision1.page_revision.id %}' target='blank'>Preview</a>
 					</p>
-					<img id="image1" style="vertical-align:top;" src="{{ revision1.screenshot.url }}">
-					<img id="image1_mobile" style="vertical-align:top;" src="{{ revision1.mobile_screenshot.url }}">
+					<img id="image1" style="vertical-align:top;" src="{{ revision1.screenshot.url }}" crossorigin="anonymous">
+					<img id="image1_mobile" style="vertical-align:top;" src="{{ revision1.mobile_screenshot.url }}" crossorigin="anonymous">
 				</div>
 				<div class="col-sm-6" id="img_frame2">
 					<p id="title2">Revision {{ revision2.page_revision.id }} published by {{revision2.page_revision.user.get_full_name}}
 						<a href='{% url 'wagtailrollbacks:confirm_page_reversion' revision_id=revision2.page_revision.id %}' target='blank'>Revert</a> or
 						<a href='{% url 'wagtailrollbacks:preview_page_version' revision_id=revision2.page_revision.id %}' target='blank'>Preview</a>
 					</p>
-					<img id="image2" style="vertical-align:top;" src="{{ revision2.screenshot.url }}">
-					<img id="image2_mobile" style="vertical-align:top;" src="{{ revision2.mobile_screenshot.url }}">
+					<img id="image2" style="vertical-align:top;" src="{{ revision2.screenshot.url }}" crossorigin="anonymous">
+					<img id="image2_mobile" style="vertical-align:top;" src="{{ revision2.mobile_screenshot.url }}" crossorigin="anonymous">
 				</div>
 			{% else %}
 				<div class="col-sm-6" id="img_frame" hidden>
-					<img id="image1" style="vertical-align:top;" src="{{ revision1.screenshot.url }}">
-					<img id="image1_mobile" style="vertical-align:top;" src="{{ revision1.mobile_screenshot.url }}">
+					<img id="image1" style="vertical-align:top;" src="{{ revision1.screenshot.url }}" crossorigin="anonymous">
+					<img id="image1_mobile" style="vertical-align:top;" src="{{ revision1.mobile_screenshot.url }}" crossorigin="anonymous">
 				</div>
 				<div class="col-sm-6" id="img_frame2" hidden>
-					<img id="image2" style="vertical-align:top;" src="{{ revision2.screenshot.url }}">
-					<img id="image2_mobile" style="vertical-align:top;" src="{{ revision2.mobile_screenshot.url }}">
+					<img id="image2" style="vertical-align:top;" src="{{ revision2.screenshot.url }}" crossorigin="anonymous">
+					<img id="image2_mobile" style="vertical-align:top;" src="{{ revision2.mobile_screenshot.url }}" crossorigin="anonymous">
 				</div>
 			{% endif %}
 			</section>

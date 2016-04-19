@@ -28,8 +28,19 @@ def process_page_published(instance_id, revision_id):
 		'delay': '5',
 		'force': '1'
 	}
-	fp = urllib.urlopen(screenshotlayer(page_url, params))
-	prs.screenshot.save(str(revision.id) + ".png", ContentFile(fp.read()))
+
+	retrynum = 0
+	while retrynum < 10:
+		fp = urllib.urlopen(screenshotlayer(page_url, params))
+		retrynum += 1
+		if fp.getcode() == 200:
+			prs.screenshot.save(str(revision.id) + ".png", ContentFile(fp.read()))
+			break
+		else:
+			import time
+			time.sleep(retrynum*6)
+			if retrynum == 9:
+				raise Exception("Screenshotlayer did not return Image")
 
 	# Call Screenshotlater with Mobile Settings
 	params = {
@@ -40,8 +51,18 @@ def process_page_published(instance_id, revision_id):
 		'force': '1',
 		'user_agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12A366 Safari/600.1.4'
 	}
-	fp2 = urllib.urlopen(screenshotlayer(page_url, params))
-	prs.mobile_screenshot.save(str(revision.id) + "_mobile.png", ContentFile(fp2.read()))
+	retrynum = 0
+	while retrynum < 10:
+		fp2 = urllib.urlopen(screenshotlayer(page_url, params))
+		retrynum += 1
+		if fp2.getcode() == 200:
+			prs.mobile_screenshot.save(str(revision.id) + "_mobile.png", ContentFile(fp2.read()))
+			break
+		else:
+			import time
+			time.sleep(retrynum*6)
+			if retrynum == 9:
+				raise Exception("Screenshotlayer did not return Image")
 
 	diff_filename = str(revision.id) + "_diff.png"
 	try:
@@ -74,8 +95,18 @@ def get_diff(prs):
 		'user_agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36'
 	}
 	url = screenshotlayer(diff_url, params)
-	response = requests.get(url, stream=True)
-	img = Image.open(StringIO(response.content))
+	retrynum = 0
+	while retrynum < 10:
+		response = requests.get(url, stream=True)
+		retrynum += 1
+		if fresponse.status_code == 200:
+			img = Image.open(StringIO(response.content))
+			break
+		else:
+			import time
+			time.sleep(retrynum*6)
+			if retrynum == 9:
+				raise Exception("Screenshotlayer did not return Image")
 
 	# resize
 	if img.size[0] > settings.SCREENSHOT_DIFF_MAX_HEIGHT:

@@ -23,8 +23,6 @@ $(function(){
 
 	function getBase64FromImageUrl(image) {
 
-		image.setAttribute('crossOrigin', 'anonymous');
-
 	    function loadHandler() {
 	        var canvas = document.createElement("canvas");
 	        canvas.width =this.width;

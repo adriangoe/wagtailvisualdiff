@@ -33,7 +33,8 @@ Quick start
     SCREENSHOT_AWS_LOCATION = 'XXXXXXX' # Folder in which to save
     SCREENSHOT_BUCKET = True
     SCREENSHOT_STORAGE_URL = "https://%s.s3.amazonaws.com/%s" % (SCREENSHOT_AWS_BUCKET_NAME, SCREENSHOT_AWS_LOCATION)
-    SCREENSHOT_SLACK_WEBHOOK = 'XXXXXXXXXXXXX' # Configure a new Slack Webhook and paste the URL here if you want to receive notifications in Slakc
+    SCREENSHOT_SLACK_WEBHOOK = 'XXXXXXXXXXXXX' # Configure a new Slack Webhook and paste the URL here if you want to receive notifications in Slack
+    SLACK_CHANNEL = '#XXXXXXXXXX'
     SCREENSHOT_BOT_SLACK_ICON = HOSTNAME + "/public/wagtailvisualdiff/images/tailwagger.png" # Option to customize Slack Picture
     SCREENSHOT_DIFF_MAX_HEIGHT = 600 # Set a Maximum Pixel Height for the Diff Screenshots sent to Slack (For very long Websites)
     SCREENSHOTLAYER_ACCESS_KEY = 'XXXXXXXXXXXXXXXXX' # Configure on https://screenshotlayer.com/

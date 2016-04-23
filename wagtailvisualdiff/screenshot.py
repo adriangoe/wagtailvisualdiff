@@ -127,9 +127,9 @@ def send_slack_notification(name, user, prs):
 	has_previous, previous = prs.get_previous()
 	if has_previous:
 		values = {
-			"channel": "#schools-cms",
+			"channel": settings.SLACK_CHANNEL,
 			"username": "the tail wagger",
-			"icon_url": settings.SCREENSHOT_DIFF_URL + "tailwagger2.png",
+			"icon_url": settings.SCREENSHOT_BOT_SLACK_ICON,
 			"attachments": [
 				{
 					"fallback": "Click the Link to see the full diff",
@@ -143,7 +143,7 @@ def send_slack_notification(name, user, prs):
 		}
 	else:
 		values = {
-			"channel": "#schools-cms",
+			"channel": settings.SLACK_CHANNEL,
 			"username": "the tail wagger",
 			"icon_url": settings.SCREENSHOT_BOT_SLACK_ICON,
 			"attachments": [
@@ -151,7 +151,7 @@ def send_slack_notification(name, user, prs):
 					"fallback": "Click the Link to see the full diff",
 					"color": "warning",
 					"title": name + " was published by " + user,
-					"title_link": settings.HOSTNAME + "/wagtailvisualdiff/%d/to_current" % str(prs.page_revision.id),
+					"title_link": "%s/wagtailvisualdiff/%s/to_previous" % (settings.HOSTNAME, str(prs.page_revision.id)),
 					"text": str(prs.page_revision.id) + " has no screenshot of the previous Version saved",
 				}
 			],

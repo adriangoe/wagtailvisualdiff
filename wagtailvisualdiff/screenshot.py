@@ -10,9 +10,9 @@ from celery.decorators import task
 from StringIO import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.exceptions import ObjectDoesNotExist
+from socket import error as SocketError
+import errno
 from jsondiff import diff
-
-
 
 @task
 def process_page_published(instance_id, revision_id):
@@ -37,8 +37,13 @@ def process_page_published(instance_id, revision_id):
 		fp = urllib.urlopen(screenshotlayer(page_url, params))
 		retrynum += 1
 		if fp.getcode() == 200:
-			prs.screenshot.save(str(revision.id) + ".png", ContentFile(fp.read()))
-			break
+			try:
+				prs.screenshot.save(str(revision.id) + ".png", ContentFile(fp.read()))
+				break
+			except SocketError as e:
+				if e.errno not in [errno.ECONNRESET, errno.ETIMEDOUT, errno.EHOSTDOWN]:
+					raise e
+				pass
 		else:
 			import time
 			time.sleep(retrynum*6)
@@ -59,8 +64,13 @@ def process_page_published(instance_id, revision_id):
 		fp2 = urllib.urlopen(screenshotlayer(page_url, params))
 		retrynum += 1
 		if fp2.getcode() == 200:
-			prs.mobile_screenshot.save(str(revision.id) + "_mobile.png", ContentFile(fp2.read()))
-			break
+			try:
+				prs.mobile_screenshot.save(str(revision.id) + "_mobile.png", ContentFile(fp2.read()))
+				break
+			except SocketError as e:
+				if e.errno not in [errno.ECONNRESET, errno.ETIMEDOUT, errno.EHOSTDOWN]:
+					raise e
+				pass
 		else:
 			import time
 			time.sleep(retrynum*6)
@@ -212,7 +222,7 @@ def send_slack_notification(name, user, prs):
 				"channel": settings.SLACK_CHANNEL,
 				"username": "the tail wagger",
 				"icon_url": settings.SCREENSHOT_BOT_SLACK_ICON,
-				"text": "TEST ON LOCALHOST " + name + " was published by " + user,
+				"text": name + " was published by " + user,
 				"attachments": [
 					{
 						"fallback": "Click the Link to see the full diff",
@@ -227,7 +237,7 @@ def send_slack_notification(name, user, prs):
 				"channel": settings.SLACK_CHANNEL,
 				"username": "the tail wagger",
 				"icon_url": settings.SCREENSHOT_BOT_SLACK_ICON,
-				"text": "TEST ON LOCALHOST " + name + " was published by " + user + ". Unfortunately we are missing a screenshot, but here is the detailed Diff: %s/wagtailvisualdiff/%s/to_previous" % (settings.HOSTNAME, str(prs.page_revision.id)),
+				"text": name + " was published by " + user + ". Unfortunately we are missing a screenshot, but here is the detailed Diff: %s/wagtailvisualdiff/%s/to_previous" % (settings.HOSTNAME, str(prs.page_revision.id)),
 				"attachments": get_changes(previous_id, prs.page_revision.id),
 			}
 	else:
@@ -235,7 +245,7 @@ def send_slack_notification(name, user, prs):
 			"channel": settings.SLACK_CHANNEL,
 			"username": "the tail wagger",
 			"icon_url": settings.SCREENSHOT_BOT_SLACK_ICON,
-			"text": "TEST ON LOCALHOST New Page: " + name + " was published by " + user + ". " + prs.page_revision.page.url,
+			"text": "New Page: " + name + " was published by " + user + ". " + prs.page_revision.page.url,
 			"attachments": [
 				{
 					"fallback": "Click the Link to see the new page",

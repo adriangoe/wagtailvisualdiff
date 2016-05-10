@@ -131,8 +131,10 @@ def diff_json(a, b):
 				new = {}
 				old_str = ""
 				for (key, val) in block_diff[0].items():
-					if val:
+					if isinstance(val, str):
 						old_str += key + ":    " + val.encode('ascii', 'xmlcharrefreplace') + "\n"
+					elif isinstance(val, int):
+						old_str += key + ":    " + str(val).encode('ascii', 'xmlcharrefreplace') + "\n"
 					else:
 						old_str += key + ":    Empty\n"
 				old[raw_diff[element]['type'][0]] = old_str

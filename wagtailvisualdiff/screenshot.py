@@ -131,14 +131,13 @@ def get_changes(previous_id, revision_id):
 				for value in block_diff:
 					fields.append(
 						{
-							"title": value,
-							"value": block_diff[value][1],
+							"value": value,
 							"short": True
 						})
 				block_type = b_json[element]['type']
 
 			except:
-				block_type = raw_diff[element]['type'][0]+" to "+raw_diff[element]['type'][1]
+				block_type = raw_diff[element]['type'][0]+" to: "+raw_diff[element]['type'][1]
 				fields.append(
 					{
 						"value": "Complicated Changes: Details in Link"

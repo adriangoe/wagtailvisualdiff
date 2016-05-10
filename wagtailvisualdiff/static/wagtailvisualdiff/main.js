@@ -32,14 +32,12 @@ $(function(){
 	        ctx.drawImage(image, 0, 0);
 	        var dataURL = canvas.toDataURL("image/png");
 	        imagesdict[imagefields.indexOf(image)] = dataURL;
-	        console.log("loaded");
 
         	image.onclick = function(){
 				window.open(image.src, '_blank');
 			};
 
 	        if(Object.keys(imagesdict).length == 4){
-	        	console.log(imagesdict)
 				resembleControl = resemble(imagesdict[0]).compareTo(imagesdict[1]).onComplete(onComplete);
 				resembleControl2 = resemble(imagesdict[2]).compareTo(imagesdict[3]).onComplete(onComplete);
 				$('.buttons').show();
@@ -128,7 +126,6 @@ $(function(){
 				window.open(img.src, '_blank');
 			});
 		};
-		console.log(data);
 		img.src = data.getImageDataUrl();
 	}
 

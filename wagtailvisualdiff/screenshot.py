@@ -149,6 +149,12 @@ def get_changes(previous_id, revision_id):
 					"color": "warning"
 				}
 				)
+	if not changes:
+		changes.append(
+			{
+				"title": "No fields were changed",
+				"color": "success"
+			})
 	return changes
 
 def screenshotlayer(url, args):

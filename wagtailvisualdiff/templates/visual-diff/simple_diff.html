@@ -21,17 +21,20 @@
 				</div>
 				<div class="col-sm-6">
 					<p id="title1">Revision {{ revision1.id }} published by {{revision1.user.get_full_name}} on {{revision1.created_at}} -
-						<a href='{% url 'wagtailrollbacks:confirm_page_reversion' revision_id=revision1.id %}' target='blank'>Revert</a> or
-						<a href='{% url 'wagtailrollbacks:preview_page_version' revision_id=revision1.id %}' target='blank'>Preview</a>
+						<a href='{% url 'wagtailadmin_pages:revisions_view' revision1.page.id revision1.id %}' target='blank'>Preview</a> or
+						<a href='{% url 'wagtailadmin_pages:revisions_revert' revision1.page.id revision1.id %}' target='blank'>Edit</a>
 					</p>
 				</div>
 				<div class="col-sm-6">
 					<p id="title2">Revision {{ revision2.id }} published by {{revision2.user.get_full_name}} on {{revision1.created_at}} -
-						<a href='{% url 'wagtailrollbacks:confirm_page_reversion' revision_id=revision2.id %}' target='blank'>Revert</a> or
-						<a href='{% url 'wagtailrollbacks:preview_page_version' revision_id=revision2.id %}' target='blank'>Preview</a>
+						<a href='{% url 'wagtailadmin_pages:revisions_view' revision2.page.id revision2.id %}' target='blank'>Preview</a> or
+						{% if revision2 == revision2.page.get_latest_revision %}
+                            <a href="{% url 'wagtailadmin_pages:edit' revision2.page.id %}" target='blank'>Edit</a>
+                        {% else %}
+							<a href='{% url 'wagtailadmin_pages:revisions_revert' revision2.page.id revision2.id %}' target='blank'>Edit</a>
+                        {% endif %}
 					</p>
 				</div>
-
 
 				<div class="col-sm-12">
 

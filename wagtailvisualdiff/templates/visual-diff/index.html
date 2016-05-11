@@ -97,14 +97,18 @@
 					<div class="col-sm-12"><h1 id="changes">Page: <a href="{{revision1.page_revision.page.url}}">{{ revision1.page_revision.page }}</a></h1></div>
 					<div class="col-sm-6">
 						<p id="title1">Revision {{ revision1.page_revision.id }} published by {{revision1.page_revision.user.get_full_name}} on {{revision1.page_revision.created_at}} -
-							<a href='{% url 'wagtailrollbacks:confirm_page_reversion' revision_id=revision1.page_revision.id %}' target='blank'>Revert</a> or
-							<a href='{% url 'wagtailrollbacks:preview_page_version' revision_id=revision1.page_revision.id %}' target='blank'>Preview</a>
+							<a href='{% url 'wagtailadmin_pages:revisions_view' revision1.page_revision.page.id revision1.page_revision.id %}' target='blank'>Preview</a> or
+							<a href='{% url 'wagtailadmin_pages:revisions_revert' revision1.page_revision.page.id revision1.page_revision.id %}' target='blank'>Edit</a>
 						</p>
 					</div>
 					<div class="col-sm-6">
 						<p id="title2">Revision {{ revision2.page_revision.id }} published by {{revision2.page_revision.user.get_full_name}} on {{revision1.page_revision.created_at}} -
-							<a href='{% url 'wagtailrollbacks:confirm_page_reversion' revision_id=revision2.page_revision.id %}' target='blank'>Revert</a> or
-							<a href='{% url 'wagtailrollbacks:preview_page_version' revision_id=revision2.page_revision.id %}' target='blank'>Preview</a>
+							<a href='{% url 'wagtailadmin_pages:revisions_view' revision2.page_revision.page.id revision2.page_revision.id %}' target='blank'>Preview</a> or
+							{% if revision2.page_revision == revision2.page_revision.page.get_latest_revision %}
+                                <a href="{% url 'wagtailadmin_pages:edit' revision2.page_revision.page.id %}" target='blank'>Edit</a>
+                            {% else %}
+								<a href='{% url 'wagtailadmin_pages:revisions_revert' revision2.page_revision.page.id revision2.page_revision.id %}' target='blank'>Edit</a>
+                            {% endif %}
 						</p>
 					</div>
 

@@ -9,7 +9,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='wagtailvisualdiff',
-    version='0.1',
+    version='0.2',
     packages=find_packages(),
     include_package_data=True,
     license='MIT License',
@@ -29,8 +29,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=[
-        "wagtail>=0.8.7",
-        "wagtailplus",
+        "wagtail>=1.4",
         "jsondiff",
     ],
 )

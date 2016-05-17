@@ -152,8 +152,9 @@ def diff_json(a, b):
 				good_diff[element] = [old_dict, new_dict]
 				print good_diff[element]
 			except:
-				old_dict['type'] = raw_diff[element]['type']
-				new_dict['type'] = raw_diff[element]['type']
+				if 'type' in raw_diff[element]:
+					old_dict['type'] = raw_diff[element]['type']
+					new_dict['type'] = raw_diff[element]['type']
 				old = {}
 				new = {}
 				old['Complicated Changes'] = block_diff

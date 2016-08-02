@@ -260,5 +260,21 @@ def send_slack_notification(name, user, prs):
 	headers = {'Content-type' : 'application/json'}
 	requests.post(settings.SCREENSHOT_SLACK_WEBHOOK, data=json.dumps(values), headers=headers)
 
+@task
+def process_page_unpublished(instance_id):
+	instance = Page.objects.get(pk=instance_id)
+
+	values = {
+			"channel": settings.SLACK_CHANNEL,
+			"username": "the tail wagger",
+			"icon_url": settings.SCREENSHOT_BOT_SLACK_ICON,
+			"text": instance.title + " was unpublished! %s/cms/admin/pages/%s/edit/" % (settings.HOSTNAME, instance_id),
+		}
+	headers = {'Content-type' : 'application/json'}
+	requests.post(settings.SCREENSHOT_SLACK_WEBHOOK, data=json.dumps(values), headers=headers)
+
 def process_page_published_async(**kwargs):
 	process_page_published.delay(kwargs['instance'].pk, kwargs['revision'].pk)
+
+def process_page_unpublished_async(**kwargs):
+	process_page_unpublished.delay(kwargs['instance'].pk)

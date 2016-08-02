@@ -1,5 +1,5 @@
 from django.db import models
-from wagtail.wagtailcore.signals import page_published
+from wagtail.wagtailcore.signals import page_published, page_unpublished
 from wagtail.wagtailcore.models import PageRevision
 from django.core.exceptions import ObjectDoesNotExist
 from custom_storages import ScreenshotStorage
@@ -41,3 +41,6 @@ class PageRevisionScreenshot(models.Model):
 
 # Trigger notification every time page is published
 page_published.connect(screenshot.process_page_published_async)
+
+page_unpublished.connect(screenshot.process_page_unpublished_async)
+

@@ -3,7 +3,7 @@ from wagtail.wagtailcore.signals import page_published, page_unpublished
 from wagtail.wagtailcore.models import PageRevision
 from django.core.exceptions import ObjectDoesNotExist
 from custom_storages import ScreenshotStorage
-import screenshot
+from . import screenshot
 
 # Create your models here.
 

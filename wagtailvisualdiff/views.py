@@ -1,3 +1,4 @@
+from builtins import str
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import get_object_or_404
@@ -130,7 +131,7 @@ def diff_json(a, b):
 				old = {}
 				new = {}
 				old_str = ""
-				for (key, val) in block_diff[0].items():
+				for (key, val) in list(block_diff[0].items()):
 					if isinstance(val, str):
 						old_str += key + ":    " + val.encode('ascii', 'xmlcharrefreplace') + "\n"
 					elif isinstance(val, int):
@@ -139,7 +140,7 @@ def diff_json(a, b):
 						old_str += key + ":    Empty\n"
 				old[raw_diff[element]['type'][0]] = old_str
 				new_str = ""
-				for (key, val) in block_diff[1].items():
+				for (key, val) in list(block_diff[1].items()):
 					if isinstance(val, str):
 						new_str += key + ":    " + val.encode('ascii', 'xmlcharrefreplace') + "\n"
 					elif isinstance(val, int):

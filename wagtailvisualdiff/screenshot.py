@@ -1,13 +1,16 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from wagtail.wagtailcore.models import Page, PageRevision
 import requests
 from django.core.files.base import ContentFile
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import hashlib
 import json
 from PIL import Image
 from django.conf import settings
 from celery.decorators import task
-from StringIO import StringIO
+from io import StringIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.exceptions import ObjectDoesNotExist
 from socket import error as SocketError
@@ -34,7 +37,7 @@ def process_page_published(instance_id, revision_id):
 
 	retrynum = 0
 	while True:
-		fp = urllib.urlopen(screenshotlayer(page_url, params))
+		fp = urllib.request.urlopen(screenshotlayer(page_url, params))
 		retrynum += 1
 		if fp.getcode() == 200:
 			try:
@@ -61,7 +64,7 @@ def process_page_published(instance_id, revision_id):
 	}
 	retrynum = 0
 	while True:
-		fp2 = urllib.urlopen(screenshotlayer(page_url, params))
+		fp2 = urllib.request.urlopen(screenshotlayer(page_url, params))
 		retrynum += 1
 		if fp2.getcode() == 200:
 			try:
@@ -162,7 +165,7 @@ def screenshotlayer(url, args):
 	secret_keyword = settings.SCREENSHOTLAYER_SECRET_KEYWORD
 
 	# encode URL
-	query = urllib.urlencode(dict(url=url, **args))
+	query = urllib.parse.urlencode(dict(url=url, **args))
 	# generate md5 secret key
 	secret_key = hashlib.md5('{}{}'.format(url, secret_keyword)).hexdigest()
 

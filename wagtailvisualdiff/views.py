@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import get_object_or_404
 from models import PageRevisionScreenshot
-from wagtail.wagtailcore.models import Page, PageRevision
+from wagtail.core.models import Page, PageRevision
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.encoding import smart_str
 from jsondiff import diff
@@ -150,7 +150,7 @@ def diff_json(a, b):
 				old_dict['value'] = old
 				new_dict['value'] = new
 				good_diff[element] = [old_dict, new_dict]
-				print good_diff[element]
+				# print good_diff[element]
 			except:
 				if 'type' in raw_diff[element]:
 					old_dict['type'] = raw_diff[element]['type']

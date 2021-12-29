@@ -1,8 +1,9 @@
 
 *.pyc
 
-*.txt
 
 wagtailvisualdiff.egg-info/PKG-INFO
 
 *.gz
+
+venv
